@@ -347,6 +347,8 @@
       hashCheckResult = hashInput.trim().toLowerCase() === sha512.toLowerCase() ? 'valid' : 'invalid'
     } else if (hashInput.trim().toLowerCase().length === 32 && md5) {
       hashCheckResult = hashInput.trim().toLowerCase() === md5.toLowerCase() ? 'valid' : 'invalid'
+    } else {
+      hashCheckResult = ''
     }
   }
 </script>
