@@ -340,6 +340,15 @@
       console.error('Failed to copy: ', err);
     }
   }
+  $ : {
+    if (hashInput.trim().toLowerCase().length === 64 && sha256) {
+      hashCheckResult = hashInput.trim().toLowerCase() === sha256.toLowerCase() ? 'valid' : 'invalid'
+    } else if (hashInput.trim().toLowerCase().length === 128 && sha512) {
+      hashCheckResult = hashInput.trim().toLowerCase() === sha512.toLowerCase() ? 'valid' : 'invalid'
+    } else if (hashInput.trim().toLowerCase().length === 32 && md5) {
+      hashCheckResult = hashInput.trim().toLowerCase() === md5.toLowerCase() ? 'valid' : 'invalid'
+    }
+  }
 </script>
 
 <main
@@ -393,51 +402,13 @@ If you disabled JavaScript, this is your fault.
           <input
             type="text"
             placeholder="Enter hash to check"
-            class="w-full rounded border-2 border-zinc-700 bg-zinc-800 px-3 py-2 pr-10 text-sm
+            class="w-full rounded border-2 bg-zinc-800 px-3 py-2 pr-10 text-sm
 text-zinc-300 placeholder:text-zinc-500 focus:ring-0 focus:outline-none"
+            class:border-green-500={hashCheckResult === "valid"}
+            class:border-red-500={hashCheckResult === "invalid"}
+            class:border-zinc-700={hashCheckResult === ""}
             bind:value={hashInput}
             autocomplete="off"
-            on:input={(e) => {
-              const input = e.target as HTMLInputElement;
-              const hash = input.value.trim().toLowerCase();
-
-              // Reset border classes and icon state
-              input.classList.remove('border-green-500', 'border-red-500', 'border-zinc-700');
-              hashCheckResult = '';
-
-              if (hash.length === 64 && sha256) {
-                // SHA-256 hash
-                if (hash === sha256.toLowerCase()) {
-                  input.classList.add('border-green-500');
-                  hashCheckResult = 'valid';
-                } else {
-                  input.classList.add('border-red-500');
-                  hashCheckResult = 'invalid';
-                }
-              } else if (hash.length === 128 && sha512) {
-                // SHA-512 hash
-                if (hash === sha512.toLowerCase()) {
-                  input.classList.add('border-green-500');
-                  hashCheckResult = 'valid';
-                } else {
-                  input.classList.add('border-red-500');
-                  hashCheckResult = 'invalid';
-                }
-              } else if (hash.length === 32 && md5) {
-                // MD5 hash
-                if (hash === md5.toLowerCase()) {
-                  input.classList.add('border-green-500');
-                  hashCheckResult = 'valid';
-                } else {
-                  input.classList.add('border-red-500');
-                  hashCheckResult = 'invalid';
-                }
-              } else {
-                // Default border when no hash is detected or no computed hashes available
-                input.classList.add('border-zinc-700');
-                hashCheckResult = '';
-              }
-            }}
           />
 
           <!-- Status icon -->
